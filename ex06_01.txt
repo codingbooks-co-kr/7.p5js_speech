@@ -1,0 +1,11 @@
+// 음성인식 결과 출력1 (한 번 실행)
+
+let rec = new p5.SpeechRec();
+rec.lang = 'ko-KR';
+rec.onResult = recResult;
+rec.start();
+
+function recResult() {
+  console.log(rec);
+  console.log(rec.resultString);
+}

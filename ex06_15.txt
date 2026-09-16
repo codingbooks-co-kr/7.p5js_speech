@@ -1,0 +1,52 @@
+// 음성으로 숫자 맞추기 게임
+
+let speech = new p5.Speech();
+let rec = new p5.SpeechRec('ko-KR', recResult);
+let answer, speaking = false;
+
+function setup() {
+  noCanvas();
+  speech.setLang('ko-KR');
+  speech.started(speechStart);
+  speech.ended(speechEnd);	
+  rec.onEnd = recEnd;	
+  rec.start(true, false);	
+
+  createP('[숫자(10-20)를 맞추어 봅시다]');
+  createP('[음성인식 시작]');
+  answer = int(random(10, 21));
+  console.log('정답: ' + answer);
+}
+
+function recResult() {	
+  createDiv(rec.resultString);	
+  let yourAnswer = int(rec.resultString);
+  if (yourAnswer < 10 || yourAnswer > 20 || isNaN(yourAnswer)) {
+    speech.speak('10에서 20 사이의 정수를 말해주세요');
+  } else if (yourAnswer < answer) {
+    speech.speak('작은 숫자');	
+  } else if (yourAnswer > answer) {
+    speech.speak('큰 숫자');
+  } else if (yourAnswer === answer) {
+    speech.speak('정답입니다!');
+    answer = int(random(10, 21));
+    console.log('정답: ' + answer);
+  }
+}
+
+function speechStart() {
+  speaking = true;
+  rec.stop();	
+}
+
+function speechEnd() {	
+  speaking = false;
+  rec.start();	
+}
+
+function recEnd() {		
+  if (!speaking) {	
+    console.log('음성인식 재시작');
+    rec.start();	
+  }
+}

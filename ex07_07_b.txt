@@ -1,0 +1,19 @@
+// 연속음성인식 (캔버스 미사용)
+
+let rec = new p5.SpeechRec('ko-KR', recResult);
+
+function setup() {
+  noCanvas();
+  createDiv('[음성인식 시작]');
+  rec.start(true, false);
+  rec.onEnd = recEnd;
+}
+
+function recResult() {
+  createDiv(rec.resultString);
+}
+
+function recEnd() {
+  console.log('[음성인식 재시작]');
+  rec.start();
+}

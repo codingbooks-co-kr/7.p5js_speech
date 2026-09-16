@@ -1,0 +1,48 @@
+// 마우스를 누를 때마다 랜덤, 정지를 반복하고 정지되었을 때 이모지명을 합성음성으로 출력
+
+let speech = new p5.Speech();
+let words = ['원숭이', '고양이', '호랑이', '돼지', '낙타', '코끼리'];
+let animals = ['🐵', '🐱', '🐯', '🐷', '🐪', '🐘'];	// 
+let index = 0, stop = false;
+
+function setup() {
+  createCanvas(400, 200);
+  speech.setLang('ko-KR');
+  speech.started(speechStart);
+  speech.ended(speechEnd);
+}
+
+function draw() {
+  background(0);
+  fill(255);
+  textSize(80);
+  textAlign(CENTER, CENTER);
+  text(animals[index], width/2, height/2);
+
+  if (stop) {
+    noLoop();
+  } else {
+    index = int(random(animals.length));
+  }
+}
+
+function mousePressed() {
+  stop = !stop;
+  if (stop) {
+    speech.speak(words[index]);
+    text(animals[index], width/2, height/2);
+  } else {
+    loop();
+  }
+}
+
+function speechStart() {
+  textSize(20);
+  text(words[index], width/2, 160);
+}
+
+function speechEnd() {
+  background(0);
+  textSize(30);
+  text('마우스를 누르세요!', width/2, height/2);
+}

@@ -1,0 +1,30 @@
+// 연속음성인식 (캔버스 사용)
+
+let rec = new p5.SpeechRec('ko-KR', recResult);
+let myFont, y = 60;
+
+function preload() {
+  // 웹폰트 URL을 복사, 붙여넣기
+  myFont = loadFont('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/LeeSeoyun.woff');
+}
+
+function setup() {
+  createCanvas(400, 400);
+  background(200);
+  fill(0);
+  textFont('LeeSeoyun', 20);
+  text('[음성인식 시작]', 10, 30);
+  
+  rec.onEnd = recEnd;
+  rec.start(true, false);
+}
+
+function recResult() {
+  text(rec.resultString, 10, y);
+  y += 30;
+}
+
+function recEnd() {
+  console.log('[음성인식 재시작]');
+  rec.start();
+}

@@ -1,0 +1,14 @@
+// 음성합성으로 한국어 문장을 출력하고 음성합성 리스트 표시1
+
+// 음성합성 객체 생성: ❶합성음성 설정, ❷합성음성 로딩 시 콜백함수 speechLoad() 호출
+let speech = new p5.Speech('Google 한국의', speechLoad);
+
+function setup() {
+  noCanvas();
+}
+
+function speechLoad() {
+  speech.setLang('ko-KR');
+  speech.listVoices();
+  speech.speak('안녕하세요');
+}

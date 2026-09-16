@@ -1,0 +1,39 @@
+// 아이콘을 마우스로 누르면 합성음성으로 출력
+
+let speech = new p5.Speech();
+let words = ['연주', '정지'];
+let music = ['e1c4', 'ef71'];
+let icon, size = 100, x1 = 30, x2 = 180, y = 150;
+
+function setup() {
+  createCanvas(300, 200);
+  textFont('Material Symbols Outlined');
+  textSize(size);
+  speech.setLang('ko-KR');
+  speech.started(speechStart);
+  speech.ended(speechEnd);
+}
+
+function draw() {
+  background(200);
+  icon = char(unhex(music[0]));
+  text(icon, x1, y);
+  icon = char(unhex(music[1]));
+  text(icon, x2, y);
+}
+
+function mousePressed() {
+  if (mouseX > x1 && mouseX < x1+size && mouseY > y-size && mouseY < y) {
+    speech.speak(words[0]);
+  } else if (mouseX > x2 && mouseX < x2+size && mouseY > y-size && mouseY < y) {
+    speech.speak(words[1]);
+  }
+}
+
+function speechStart() {
+  fill(255, 0, 0);
+}
+
+function speechEnd() {
+  fill(0);
+}

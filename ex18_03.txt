@@ -1,0 +1,75 @@
+// 음성인식으로 택시 이동, 택시를 따라가는 자전거, 게임 종료 시 음성인식으로 게임 재시작
+
+let rec = new p5.SpeechRec('ko-KR', recResult);
+let result = '', x1 = 250, y1 = 250, x2 = 500, y2 = 500;
+
+function setup() {
+  createCanvas(500, 500);
+  rec.onEnd = recEnd;
+  rec.start(true, true);
+  textAlign(CENTER, CENTER);
+  textFont('Material Symbols Outlined');
+  textSize(50);
+}
+
+function draw() {
+  background(0);
+  fill(255, 255, 255);
+  let texi = char(unhex('e559'));
+  text(texi, x1, y1);
+  fill(255, 255, 0);
+  let bike = char(unhex('e52f'));
+  text(bike, x2, y2);
+
+  move();
+  chase();
+  gameover();
+}
+
+function move() {
+  if (result.indexOf('왼쪽') !== -1) {
+    x1 -= 2;
+  } else if (result.indexOf('오른쪽') !== -1) {
+    x1 += 2;
+  } else if (result.indexOf('위쪽') !== -1) {
+    y1 -= 2;
+  } else if (result.indexOf('아래쪽') !== -1) {
+    y1 += 2;
+  }
+  x1 = constrain(x1, 0, width);
+  y1 = constrain(y1, 0, height);
+}
+
+function chase() {
+  let dx = x1 - x2;
+  let dy = y1 - y2;
+  if (dx > 0) x2++;
+  if (dx < 0) x2--;
+  if (dy > 0) y2++;
+  if (dy < 0) y2--;
+}
+
+function gameover() {
+  let d = dist(x1, y1, x2, y2);
+  if (d < 5) {
+    text("게임 종료", width/2, height/2);
+    noLoop();
+  }
+}
+
+function recResult() {
+  result = rec.resultString;
+  console.log(result);
+  if (result.indexOf('시작') !== -1) {
+    x1 = 250;
+    y1 = 250;
+    x2 = 500;
+    y2 = 500;
+    loop();
+  }
+}
+
+function recEnd() {
+  console.log('[음성인식 재시작]');
+  rec.start();
+}

@@ -1,0 +1,42 @@
+// “객체 리터럴”을 사용하여 음성인식으로 아이콘 출력
+
+let rec = new p5.SpeechRec('ko-KR', recResult); 		// 객체 생성 및 초기화
+let traffic = { 자전거: 'eb29', 버스: 'e530', 비행기: 'e539' };	// 객체 리터럴
+let icon, result = '';
+
+function setup() {
+  createCanvas(400, 200);
+  textFont('Material Symbols Outlined'); 			// 아이콘 폰트 설정
+  textAlign(CENTER, CENTER);
+  createP('인식단어: 자전거, 버스, 비행기');
+
+  rec.onEnd = recEnd; 				// 음성인식 종료 시 콜백함수 recEnd() 호출
+  rec.start(true, false); 			// 연속음성인식 설정, 최종 인식 결과만 출력
+}
+
+function draw() {
+  background(200);
+  textSize(200);
+  if (result.indexOf('자전거') !== -1) {	// 인식 문장 중 '자전거'가 포함된 경우
+    icon = char(unhex(traffic.자전거)); 	// 16진수→10진수→문자형으로 형변환
+  } else if (result.indexOf('버스') !== -1) {	// 인식 문장 중 '버스'가 포함된 경우
+    icon = char(unhex(traffic.버스)); 		// 16진수→10진수→문자형으로 형변환
+  } else if (result.indexOf('비행기') !== -1) {	// 인식 문장 중 '비행기'가 포함된 경우
+    icon = char(unhex(traffic.비행기)); 		// 16진수→10진수→문자형으로 형변환
+  } else {					// 오인식의 경우
+    icon = '';					// 빈문자열
+    textSize(40);
+    text('운송수단을 말하세요', width/2, height/2);
+  }
+  text(icon, width/2, height/2); 		// 아이콘 문자 표시
+}
+
+function recResult() {				// 콜백함수: 음성인식 결과 반환 시 자동 호출
+  result = rec.resultString; 			// 음성인식 결과를 result에 저장
+  console.log(result);
+}
+
+function recEnd() {				// 콜백함수: 음성인식 종료 시 자동 호출
+  console.log('[음성인식 재시작]');
+  rec.start(); 					// 음성인식 재시작
+}

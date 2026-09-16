@@ -1,0 +1,53 @@
+// p5.js: 가변저항값 2개 수신하여 원을 상하좌우 이동하고 원의 위치를 음성으로 출력1
+
+let speech = new p5.Speech();
+let port = new p5.SerialPort();
+let value1 = 0, value2 = 0, num1 = 0, num2 = 0, prevNum1 = 0, prevNum2 = 0;
+
+function setup() {
+  createCanvas(400, 400);
+  port.open('COM5');
+  port.on('data', serialEvent);
+  speech.setLang('ko-KR');
+}
+
+function draw() {
+  // 페이딩 효과
+  noStroke();
+  fill(0, 10);
+  rect(0, 0, width, height);
+  
+  stroke(255, 255, 0);
+  line(width/2, 0, width/2, height);
+  line(0, height/2, width, height/2);
+  fill(255, 255, 0);
+  ellipse(value1, value2, 50, 50);
+}
+
+function serialEvent() {
+  if (port.available() >= 3) {
+    let signal = port.readChar();
+    if (signal === 'A') {
+      value1 = port.read();
+      value2 = port.read();
+      value1 = map(value1, 0, 255, 0, width-1);
+      value2 = map(value2, 0, 255, 0, height-1);
+    }
+  }
+  
+  num1 = int(value1 / (width/2));
+  num2 = int(value2 / (height/2));
+  if (num1 != prevNum1 || num2 != prevNum2) {
+    if (num1 < 1 && num2 < 1) {
+      speech.speak('왼쪽위');				// 합성음성 출력
+    } else if (num1 < 2 && num2 < 1) {
+      speech.speak('오른쪽위');				// 합성음성 출력
+    } else if (num1 < 1 && num2 < 2) {
+      speech.speak('왼쪽아래');				// 합성음성 출력
+    } else if (num1 < 2 && num2 < 2) {
+      speech.speak('오른쪽아래');			// 합성음성 출력
+    }
+  }
+  prevNum1 = num1;
+  prevNum2 = num2;
+}

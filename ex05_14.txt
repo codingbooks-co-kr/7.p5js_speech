@@ -1,0 +1,29 @@
+// 마우스의 위치가 원의 안쪽인지 바깥쪽인지에 따라 원의 색상이 바뀌고 음성 출력
+
+let speech = new p5.Speech();
+let d, r = 100, change = false, inOut = false;
+
+function setup() {
+  createCanvas(300, 300);
+  speech.setLang('ko-KR');
+}
+
+function draw() {
+  background(0);
+  d = dist(width/2, height/2, mouseX, mouseY);
+  if (d < r) {
+    fill(255, 0, 0);
+    inOut = true;
+    if (change !== inOut) {
+      speech.speak('안쪽');
+    }
+  } else {
+    fill(255, 255, 255);
+    inOut = false;
+    if (change !== inOut) {
+      speech.speak('바깥쪽');
+    }
+  }
+  ellipse(width/2, height/2, r*2, r*2);
+  change = inOut;
+}

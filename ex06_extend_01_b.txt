@@ -1,0 +1,4 @@
+function setup() {
+  let str = 'Hello p5.js!';
+  print(str.replace('p5.js', 'Kim'));	// 문자열 치환
+}

@@ -1,0 +1,18 @@
+// 문자열(let) 변수를 사용하여 문자열 출력
+
+let s = 'Hello, p5.js!';
+let x = 70, y = 70;
+
+function setup() {
+  createCanvas(400, 300);
+  background(200);
+
+  fill(255, 0, 0);
+  textSize(30);
+  text(s, x, y);
+  text(s, x, y*2); 
+  text(s, y, y*3);
+
+  print(s, x, y);
+  print(s + x + y);
+}

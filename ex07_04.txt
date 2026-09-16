@@ -1,0 +1,57 @@
+// 음성인식으로 문장 입력 후 텍스트 영역을 마우스로 누르면 합성음성으로 출력
+
+let speech = new p5.Speech();
+let rec = new p5.SpeechRec('ko-KR', recResult);
+let textArea, words = '', speaking = false;
+
+function setup() {
+  noCanvas();
+  createElement('h2', '음성인식으로 문장 입력 후 음성 출력');
+
+  textArea = createElement('textarea');
+  textArea.style('font-size', '20px');
+  textArea.attribute('rows', '10');
+  textArea.attribute('cols', '40');
+  textArea.mousePressed(talk); 
+  
+  speech.setLang('ko-KR');
+  speech.started(speechStart);
+  speech.ended(speechEnd);
+
+  rec.onEnd = recEnd;
+  rec.start(true, false);
+}
+
+function draw() {
+  textArea.value(words);
+}
+
+function talk() {
+  words = textArea.value();
+  speech.speak(words);
+}
+
+function recResult() {
+  let result = rec.resultString;
+  words += result;
+  words += '. ';
+}
+
+function speechStart() {
+  speaking = true;
+  textArea.style('background-color', '#ffff00');
+  rec.stop();
+}
+
+function speechEnd() {
+  speaking = false;
+  textArea.style('background-color', '#ffffff');
+  rec.start();
+}
+
+function recEnd() {
+  if (!speaking) {
+    console.log('음성인식 재시작');
+    rec.start();
+  }
+}

@@ -1,0 +1,12 @@
+function setup() {
+  createCanvas(200, 200);
+  textFont('Material Symbols Outlined');
+  textAlign(CENTER, CENTER);
+  textSize(100);
+}
+
+function draw() {
+  background(200);
+  let icon = char(unhex('e52f'));
+  text(icon, width/2, height/2);
+}

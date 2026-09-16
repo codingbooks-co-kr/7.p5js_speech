@@ -1,0 +1,11 @@
+// 텍스트 입력창 생성
+
+function setup() {
+  noCanvas();
+  createElement('h2', '텍스트를 입력해 봅시다');
+
+  let textArea = createElement('textarea', '엄마야 누나야');
+  textArea.style('font-size', '20px');
+  textArea.attribute('rows', '4');
+  textArea.attribute('cols', '25');
+}

@@ -1,0 +1,40 @@
+// 키워드(→왼쪽, 오른쪽, 정지)를 포함한 문장을 인식하고 원의 좌우 이동/정지 제어
+
+let rec = new p5.SpeechRec('ko-KR', recResult);
+let x = 200, dx = 0;
+
+function setup() {
+  createCanvas(400, 200);
+  rec.onEnd = recEnd;
+  rec.start(true, false);
+}
+
+function draw() {
+  background(0);
+  fill(255, 255, 0);
+  textSize(20);
+  text('인식단어: 왼쪽, 오른쪽, 정지', 20, 30);
+
+  fill(255, 0, 0);
+  ellipse(x, 100, 50, 50);
+  x += dx;
+  if (x < 0) x = width;
+  if (x > width) x = 0;
+}
+
+function recResult() {
+  let result = rec.resultString;
+  console.log(result);
+  if (result.indexOf('왼쪽') !== -1) {
+    dx = -1;
+  } else if (result.indexOf('오른쪽') !== -1) {
+    dx = 1;
+  } else if (result.indexOf('정지') !== -1) {
+    dx = 0;
+  }
+}
+
+function recEnd() {
+  console.log('[음성인식 재시작]');
+  rec.start();
+}

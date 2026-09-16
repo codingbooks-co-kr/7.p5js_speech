@@ -1,0 +1,23 @@
+// 마우스를 누를 때마다 배열의 문장을 차례로 합성음성으로 출력1
+
+let speech = new p5.Speech();
+let words = ['안녕하세요', '반가워요', '고마워요'];
+let index = 0;
+
+function setup() {
+  createCanvas(400, 200);
+  speech.setLang('ko-KR');
+
+  background(0);
+  fill(255, 255, 0);
+  textAlign(CENTER, CENTER);
+  textSize(30);
+  text('마우스를 누르세요!', width/2, height/2);
+}
+
+function mousePressed() {
+  background(random(255), random(255), random(255));
+  text(words[index], random(width), random(height));
+  speech.speak(words[index]);
+  index = (index + 1) % words.length;
+}

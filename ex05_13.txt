@@ -1,0 +1,27 @@
+// 원이 상하로 한 번 진동할 때마다 음성으로 횟수 출력
+
+let speech = new p5.Speech();
+let degree = 0, count = 0;
+
+function setup() {
+  createCanvas(300, 300);
+  speech.setLang('ko-KR');
+  speech.setVoice('Google 한국의');
+}
+
+function draw() {
+  background(0);
+  let theta = radians(degree);
+  let y = height/2 + height/2 * sin(theta);
+  stroke(255);
+  line(width/2, 0, width/2, y);
+  ellipse(width/2, y, 30, 30);
+  let num = degree % 360;
+  if (degree !== 0 && num === 0) {
+    fill(random(255), random(255), random(255));
+    count++;
+    console.log(degree, num, count);
+    speech.speak(`횟수 ${count}`);
+  }
+  degree += 3;
+}

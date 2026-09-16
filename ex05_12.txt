@@ -1,0 +1,24 @@
+// 원이 좌우 반사할 때 합성음성 출력
+
+let speech = new p5.Speech();
+let x = 200, velocity = 2;
+
+function setup() {
+  createCanvas(400, 200);
+  speech.setLang('ko-KR');
+}
+
+function draw() {
+  background(0);
+  ellipse(x, height/2, 50, 50);
+  x += velocity;
+  if (x < 0) {
+    fill(random(255), random(255), random(255));
+    velocity *= -1;
+    speech.speak('왼쪽 반사');
+  } else if (x > width) {
+    fill(random(255), random(255), random(255));
+    velocity *= -1;
+    speech.speak('오른쪽 반사');
+  }
+}

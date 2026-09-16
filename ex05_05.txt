@@ -1,0 +1,19 @@
+// 합성음성 텍스트 입력 후 버튼을 누르면 음성 출력
+
+let speech = new p5.Speech();
+let myInput, button, words = '안녕하세요';
+
+function setup(){
+  noCanvas();
+  speech.setLang('ko-KR');
+  speech.setVoice('Google 한국의');
+
+  myInput = createInput(words);
+  button = createButton('Text To Speech')
+  button.mousePressed(textToSpeech);
+}
+
+function textToSpeech() {
+  speech.speak(myInput.value());
+  createP(myInput.value());
+}

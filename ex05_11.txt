@@ -1,0 +1,69 @@
+// 버튼을 누를 때마다 문장 읽기-멈추기 토글
+
+let speech = new p5.Speech(); 	// 음성합성 객체 생성
+let poem = "엄마야 누나야, 강변 살자. 뜰에는 반짝이는 금모래 빛. 뒷문 밖에는 갈잎의 노래. 엄마야 누나야 강변 살자.";
+let button;
+
+function setup() {
+  createCanvas(400, 200);
+  background(0);
+  speech.setLang("ko-KR");		// 음성합성 언어 설정(한국어)
+  button = createButton("Speak");
+  button.position(20, 30);
+  button.mousePressed(textToSpeech);
+}
+
+function textToSpeech() {
+  if (button.elt.innerHTML === "Speak") {
+    speech.speak(poem); 		// 음성합성으로 문장 읽기
+    background(255, 0, 0);
+    button.html("Stop"); 		// 버튼의 내부 텍스트 변경
+    fill(255, 255, 0);
+    textSize(20);
+    text(poem, 20, 80, 350, 150); 	// text(문자열, x좌표, y좌표, 너비, 높이)
+  } else if (button.elt.innerHTML === "Stop") {
+    speech.stop(); 			// 음성합성 읽기 정지
+    background(0);
+    button.html("Speak"); 		// 버튼의 내부 텍스트 변경
+  }
+}
+
+// 버튼을 누를 때마다 문장 읽기-멈추기 토글
+
+// let speech = new p5.Speech();	// 음성합성 객체 생성
+// let poem = '엄마야 누나야, 강변 살자. 뜰에는 반짝이는 금모래 빛. 뒷문 밖에는 갈잎의 노래. 엄마야 누나야 강변 살자.';
+// let button;
+
+// function setup() {
+//   createCanvas(400, 200);
+//   background(0);
+//   speech.setLang('ko-KR');
+//   speech.started(speechStart);
+//   speech.ended(speechEnd);
+
+//   button = createButton('Speak');
+//   button.position(20, 30);
+//   button.mousePressed(textToSpeech);
+// }
+
+// function textToSpeech() {
+//   if (button.elt.innerHTML === 'Speak') {
+//     speech.speak(poem);
+//   } else if (button.elt.innerHTML === 'Stop') {
+//     speech.stop();
+//   }
+// }
+
+// function speechStart() {
+//   background(255, 0, 0);
+//   button.html('Stop');
+  
+//   fill(255, 255, 0);
+//   textSize(20);
+//   text(poem, 20, 80, 350, 150);
+// }
+
+// function speechEnd() {
+//   background(0);
+//   button.html('Speak');
+// }

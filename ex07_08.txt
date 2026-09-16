@@ -1,0 +1,25 @@
+// 연속음성인식 (캔버스 사용)
+
+let rec = new p5.SpeechRec('ko-KR', recResult);
+let y = 60;
+
+function setup() {
+  createCanvas(400, 400);
+  background(200);
+  fill(0);
+  textFont('LeeSeoyun', 20);
+  text('[음성인식 시작]', 10, 30);
+  
+  rec.onEnd = recEnd;
+  rec.start(true, false);
+}
+
+function recResult() {
+  text(rec.resultString, 10, y);
+  y += 30;
+}
+
+function recEnd() {
+  console.log('[음성인식 재시작]');
+  rec.start();
+}

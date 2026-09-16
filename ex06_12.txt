@@ -1,0 +1,65 @@
+// 키워드(→랜덤, 시작, 정지)를 포함한 문장을 인식하여 100개의 원을 랜덤 이동/시작/정지 제어
+
+let rec = new p5.SpeechRec('ko-KR', recResult);
+let x = [], y = [], dx = [], dy = [];
+let num = 100;
+
+function setup() {
+  createCanvas(400, 400);
+  createP('인식단어: 랜덤, 시작, 정지');
+  rec.onEnd = recEnd;
+  rec.start(true, false);
+  begin();
+}
+
+function draw() {
+  // 페이딩 효과
+  noStroke();
+  fill(0, 10);
+  rect(0, 0, width, height);
+
+  for (let i = 0; i < num; i++) {
+    fill(255);
+    ellipse(x[i], y[i], 10, 10);
+    if (x[i] < 0 || x[i] > width) {
+      dx[i] *= -1;
+    }
+    if (y[i] < 0 || y[i] > height) {
+      dy[i] *= -1;
+    }
+    x[i] += dx[i];
+    y[i] += dy[i];
+  }
+}
+
+function begin() {
+  for (let i = 0; i < num; i++) {
+    x[i] = width / 2;
+    y[i] = height / 2;
+    dx[i] = random(-3, 3);
+    dy[i] = random(-3, 3);
+  }
+}
+
+function recResult() {
+  let result = rec.resultString;
+  console.log(result);
+  if (result.indexOf('랜덤') !== -1) {
+    for (let i = 0; i < num; i++) {
+      dx[i] = random(-3, 3);
+      dy[i] = random(-3, 3);
+    }
+  } else if (result.indexOf('시작') !== -1) {
+    begin();
+  } else if (result.indexOf('정지') !== -1) {
+    for (let i = 0; i < num; i++) {
+      dx[i] = 0;
+      dy[i] = 0;
+    }
+  }
+}
+
+function recEnd() {
+  console.log('[음성인식 재시작]');
+  rec.start();
+}

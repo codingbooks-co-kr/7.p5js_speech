@@ -1,0 +1,37 @@
+// 음성합성을 사용하여 방향 이모지를 마우스로 누르면 음성으로 출력
+
+let speech = new p5.Speech();
+let words = ['위쪽', '아래쪽'];
+let direction = ['👆🏿', '👇🏿'];
+let size = 100, x1 = 30, x2 = 180, y = 150;
+
+function setup() {
+  createCanvas(300, 200);
+  background(200);
+  textSize(size);
+
+  speech.setLang('ko-KR');
+  speech.started(speechStart);
+  speech.ended(speechEnd);
+}
+
+function draw() {
+  text(direction[0], x1, y);
+  text(direction[1], x2, y);
+}
+
+function mousePressed() {
+  if (mouseX > x1 && mouseX < x1+size && mouseY > y-size && mouseY < y) {
+    speech.speak(words[0]);
+  } else if (mouseX > x2 && mouseX < x2+size && mouseY > y-size && mouseY < y) {
+    speech.speak(words[1]);
+  }
+}
+
+function speechStart() {
+  background(255, 0, 0);
+}
+
+function speechEnd() {
+  background(200);
+}

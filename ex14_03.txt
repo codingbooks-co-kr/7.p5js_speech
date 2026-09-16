@@ -1,0 +1,41 @@
+// p5.js: 초음파센서 거리값을 수신하여 원을 좌우 이동하고 거리를 음성으로 출력
+
+let speech = new p5.Speech();
+let port = new p5.SerialPort();
+let value = 0, newValue = 0, num = 0, prevNum = 0;
+let MIN = 5, MAX = 50;
+
+function setup() {
+  createCanvas(400, 200);
+  port.open('COM5');
+  port.on('data', serialEvent);
+  speech.setLang('ko-KR');
+}
+
+function draw() {
+  background(0);
+  fill(255, 255, 0);
+  textSize(20);
+  text('초음파센서 거리: ' + nf(value, 2) + 'cm', 20, 40);
+  stroke(255, 255, 0);
+  line(width/2, 0, width/2, height);
+  ellipse(newValue, height/2, 50, 50);
+}
+
+function mousePressed() {
+  speech.speak(`현재 거리는 ${value}센티미터입니다`);
+}
+
+function serialEvent() {
+  value = port.read();
+  newValue = map(value, MIN, MAX, 0, width-1);
+  num = int(newValue / (width/2));
+  if (num != prevNum) {
+    if (num === 0) {
+      speech.speak('가까워요');
+    } else if (num === 1) {
+      speech.speak('멀어요');
+    } 
+  }
+  prevNum = num;
+}

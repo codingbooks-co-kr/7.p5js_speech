@@ -1,0 +1,33 @@
+// 텍스트 영역을 마우스로 누르면 합성음성으로 출력
+
+let speech = new p5.Speech();
+let textArea, words = '';
+
+function setup() {
+  noCanvas();
+  let poem = '엄마야 누나야, 강변 살자. 뜰에는 반짝이는 금모래 빛, 뒷문 밖에는 갈잎의 노래, 엄마야 누나야, 강변 살자.'
+  
+  createElement('h2', '음성합성으로 문장 읽기');
+  textArea = createElement('textarea', poem);
+  textArea.style('font-size', '20px');
+  textArea.attribute('rows', '10');
+  textArea.attribute('cols', '40');
+  textArea.mousePressed(talk);
+  
+  speech.setLang('ko-KR');
+  speech.started(speechStart);
+  speech.ended(speechEnd);
+}
+
+function talk() {
+  words = textArea.value();
+  speech.speak(words);
+}
+
+function speechStart() {
+  textArea.style('background-color', '#ffff00');
+}
+
+function speechEnd() {
+  textArea.style('background-color', '#ffffff');
+}

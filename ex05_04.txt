@@ -1,0 +1,19 @@
+// 음성합성으로 한국어 인사말을 출력하고 마우스를 누르면 합성음성 변경 
+
+let speech = new p5.Speech();
+let words = '안녕하세요', num = 0;
+
+function setup() {
+  noCanvas();
+  speech.setLang('ko-KR');
+  speech.listVoices();
+}
+
+function mousePressed() {
+  speech.setVoice(num);
+  speech.speak(words);
+  createP(num + ': ' + words);
+  num++;
+  num %= speech.voices.length;
+  console.log(speech.voices);
+}

@@ -1,0 +1,21 @@
+// 연속음성인식 (음성 입력 시간 초과로 음성인식 종료 시 자동 재시작)
+
+// 음성인식 객체 생성 및 초기화 ❶한국어 설정, ❷음성인식 결과 반환 시 recResult() 호출
+let rec = new p5.SpeechRec('ko-KR', recResult);
+
+function setup() {
+  noCanvas();
+  createP('[음성인식 시작]');
+  rec.onEnd = recEnd;
+  rec.start(true, false);
+}
+
+function recResult() {
+  createDiv(rec.resultString);
+  createDiv(rec.resultConfidence);
+}
+
+function recEnd() {
+  console.log('[음성인식 재시작]');
+  rec.start();
+}

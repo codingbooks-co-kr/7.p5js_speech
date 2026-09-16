@@ -1,0 +1,26 @@
+// 랜덤하게 움직이는 사각형을 마우스로 눌러 맞추면 색상 변경
+
+let x, y, c, w = 50.0, h = 50.0, tx = 0.0, ty = 0.5;
+
+function setup() {
+  createCanvas(400, 400);
+  c = color(random(255), random(255), random(255));
+}
+
+function draw() {
+  background(0);
+  x = noise(tx) * width;
+  y = noise(ty) * height;
+
+  fill(c);
+  rect(x, y, w, h);
+  tx += 0.01;
+  ty += 0.01;
+}
+
+// 랜덤 이동하는 사각형을 마우스로 눌러 맞추면 색상이 랜덤하게 변경
+function mousePressed() {
+  if (mouseX > x && mouseX < x+w && mouseY > y && mouseY < y+h) {
+    c = color(random(255), random(255), random(255));
+  }
+}

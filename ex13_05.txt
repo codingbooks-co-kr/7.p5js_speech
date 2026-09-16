@@ -1,0 +1,43 @@
+// p5.js: 음성 제어(→위/아래 또는 위쪽/아래쪽)로 주파수(→100∼500Hz)를 문자열로 송신
+
+let rec = new p5.SpeechRec('ko-KR', recResult);
+let port = new p5.SerialPort();
+let freq = 100;
+
+function setup() {
+  createCanvas(400, 200);
+  port.open('COM5');
+  rec.onEnd = recEnd;
+  rec.start(true, false);
+}
+
+function draw() {
+  background(0);
+  fill(255, 255, 0);
+  textSize(20);
+  text('인식단어: 상(위), 하(아래)', 20, 40);
+  
+  text('주파수: ' + freq + 'Hz', 130, 100);
+  let value = map(freq, 100, 500, height, 0);
+  fill(255, 0, 0, 200);
+  ellipse(width/2, value, 50, 50);
+}
+
+function recResult() {
+  let result = rec.resultString;
+  console.log(result);
+  
+  if (result.indexOf('상') !== -1 || result.indexOf('위') !== -1) { 
+    freq += 100;
+    port.write(freq + '\n');
+  } else if (result.indexOf('하') !== -1 || result.indexOf('아래') !== -1) {
+    freq -= 100;
+    port.write(freq + '\n');
+  }
+  freq = constrain(freq, 100, 500);
+}
+
+function recEnd() {
+  console.log('[음성인식 재시작]');
+  rec.start();
+}

@@ -1,0 +1,90 @@
+// 음성인식으로 택시 이동, 택시를 따라가는 자전거, “정지” 음성 인식 시 둘 사이의 거리값을 합성음성으로 출력, 게임 종료 시 합성음성 출력 및 음성인식으로 게임 재시작
+
+let speech = new p5.Speech();
+let rec = new p5.SpeechRec("ko-KR", recResult);
+let d, speed, result = "", x1 = 250, y1 = 250, d1 = 50, x2 = 500, y2 = 500, d2 = 30, state = false;
+
+function setup() {
+  createCanvas(500, 500);
+  speech.setLang("ko-KR");
+  rec.onEnd = recEnd;
+  rec.start(true, true);
+
+  textAlign(CENTER, CENTER);
+  textFont('Material Symbols Outlined');
+  textSize(50);
+}
+
+function draw() {
+  background(0);
+  fill(255, 255, 255);
+  let texi = char(unhex('e559'));
+  text(texi, x1, y1);
+  fill(255, 255, 0);
+  let bike = char(unhex('e52f'));
+  text(bike, x2, y2);
+
+  move();
+  gameover();
+  
+  if (result.indexOf("정지") !== -1) { 
+    speed = 0;
+    if (state) {
+      speech.speak(`거리값은 ${int(d)}입니다`);
+    }
+    state = false;
+  } else {
+    state = true;
+    chase();
+  }
+}
+
+function move() {
+  speed = 2;
+  if (result.indexOf('왼쪽') !== -1) {
+    x1 -= speed;
+  } else if (result.indexOf('오른쪽') !== -1) {
+    x1 += speed;
+  } else if (result.indexOf('위쪽') !== -1) {
+    y1 -= speed;
+  } else if (result.indexOf('아래쪽') !== -1) {
+    y1 += speed;
+  }
+  x1 = constrain(x1, 0, width);
+  y1 = constrain(y1, 0, height);
+}
+
+function chase() {
+  let dx = x1 - x2;
+  let dy = y1 - y2;
+  if (dx > 0) x2++;
+  if (dx < 0) x2--;
+  if (dy > 0) y2++;
+  if (dy < 0) y2--;
+}
+
+function gameover() {
+  d = dist(x1, y1, x2, y2);
+  if (d < 5) {
+    text("게임 종료", width/2, height/2);
+    speech.speak('게임 종료');
+    noLoop();
+  }
+}
+
+function recResult() {
+  result = rec.resultString;
+  console.log(result);
+  if (result.indexOf("시작") !== -1) {
+    x1 = 250;
+    y1 = 250;
+    x2 = 500;
+    y2 = 500;
+    loop();
+  }
+}
+
+function recEnd() {
+  console.log("[음성인식 재시작]");
+  rec.start();
+}

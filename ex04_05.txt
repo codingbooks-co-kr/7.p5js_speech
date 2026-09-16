@@ -1,0 +1,26 @@
+// 랜덤하지만 방향성을 가진 1000개의 점
+
+let num = 1000;
+let x = [], y = [];
+
+function setup() {
+  createCanvas(300, 300);
+  for (let i = 0; i < num; i++) {
+    x[i] = random(width);
+    y[i] = random(height);
+  }
+}
+
+function draw() {
+  // 페이딩 효과
+  noStroke();
+  fill(0, 10);
+  rect(0, 0, width, height);
+
+  stroke(255);
+  for (let i = 0; i < num; i++) {
+    point(x[i], y[i]);
+    x[i] += random(1.0);
+    y[i] += random(1.0);
+  }
+}

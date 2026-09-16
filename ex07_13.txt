@@ -1,0 +1,10 @@
+function setup() {
+  createCanvas(400, 200);
+}
+
+function draw() {
+  background(200);
+  textSize(100);
+  textAlign(CENTER, CENTER)
+  text('😀😤😝', width/2, height/2);	// 이모지()는 아래한글에서 표시 안됨?
+}

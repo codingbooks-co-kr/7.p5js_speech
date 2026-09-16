@@ -1,0 +1,25 @@
+// 랜덤하게 출력되는 주사위값
+
+let stop = false;
+
+function setup() {
+  createCanvas(400, 200);
+}
+
+function draw() {
+  background(0);
+  let num = int(random(6)) + 1;
+  fill(255);
+  textSize(30);
+  textAlign(CENTER, CENTER);
+  text('주사위: ' + num, width/2, height/2);
+}
+
+function mousePressed() {
+  stop = !stop;
+  if (stop) {
+    noLoop();
+  } else {
+    loop();
+  }
+}

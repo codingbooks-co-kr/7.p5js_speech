@@ -1,0 +1,32 @@
+// 음성인식(영어)으로 원의 컬러 색상 변경
+
+let rec = new p5.SpeechRec('en-US', recResult);
+let col = 'WHITE';
+
+function setup() {
+  createCanvas(400, 300);
+  rec.onEnd = recEnd;
+  rec.start(true, false);
+  createP('색상: black, silver, gray, white, maroon, red, purple, fuchsia(magenta), green, lime, olive, yellow, navy, blue, teal, aqua(cyan)');
+}
+
+function draw() {
+  background(0);
+  fill(255, 255, 0);
+  textSize(20);
+  text('[색상을 영어로 말해봅시다]', 20, 30);
+  text('색상: ' + col, 20, 60);
+
+  fill(col);
+  ellipse(width/2, height/2, 150, 150);
+}
+
+function recResult() {
+  let result = rec.resultString;
+  col = result.toUpperCase();
+}
+
+function recEnd() {
+  console.log('[음성인식 재시작]');
+  rec.start();
+}

@@ -1,0 +1,15 @@
+// “객체 리터럴” 기반 객체의 생성, 추가, 삭제
+
+function setup() {
+  let circle = {		// ❶객체 리터럴 생성
+    x: 50,			// 속성1 = 키:값
+    y: 150,			// 속성2 = 키:값
+    d: 30			// 속성3 = 키:값
+  };
+  console.log(circle.x, circle.y, circle.d);		// 속성의 값 추출(점 표기)
+  console.log(circle['x'], circle['y'], circle['d']);	// 속성의 값 추출(대괄호 표기)
+  circle.velocity = 2;					// ❷속성 추가
+  delete circle.d;					// ❸속성 삭제
+  console.log(circle);					// 객체 리터럴 출력
+  console.log(typeof circle);	// ❹typeof 연산자로 데이터형 파악: circle은 객체형
+}

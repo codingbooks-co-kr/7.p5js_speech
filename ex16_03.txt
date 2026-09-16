@@ -1,0 +1,58 @@
+// 음성 제어(→자전거, 버스, 비행기, 보트, 택시, 지하철)로 생성되어 랜덤 이동하는 아이콘
+
+let rec = new p5.SpeechRec('ko-KR', recResult);
+let words = ['자전거', '버스', '비행기', '보트', '택시', '지하철'];
+let traffic = ['eb29', 'e530', 'e539', 'e532', 'e559', 'e56f'];
+let index = -1, x = 0, y = 0, tx = 0.0, ty = 0.5;
+
+function setup() {
+  createCanvas(500, 400);
+  textFont('Material Symbols Outlined');
+  rec.onEnd = recEnd;
+  rec.start(true, false);
+}
+
+function draw() {
+  background(0);
+  fill(255, 255, 0);
+  textSize(20);
+  text('인식단어: 자전거, 버스, 비행기, 보트, 택시, 지하철', 20, 30);
+
+  if (index >=0 && index < traffic.length) {
+    textSize(100);
+    let icon = char(unhex(traffic[index]));
+    text(icon, x, y);
+    x = noise(tx) * width;
+    y = noise(ty) * height;
+    tx += 0.01;
+    ty += 0.01;
+  } else {
+    textSize(40);
+    text('키워드를 말해주세요', 70, height/2);
+  }
+}
+
+function recResult() {
+  let result = rec.resultString;
+  console.log(result);
+  if (result.indexOf('자전거') !== -1) {
+    index = 0;
+  } else if (result.indexOf('버스') !== -1) {
+    index = 1;
+  } else if (result.indexOf('비행기') !== -1) {
+    index = 2;
+  } else if (result.indexOf('보트') !== -1) {
+    index = 3;
+  } else if (result.indexOf('택시') !== -1) {
+    index = 4;
+  } else if (result.indexOf('지하철') !== -1) {
+    index = 5;
+  } else {
+    index = -1;
+  }
+}
+
+function recEnd() {
+  console.log('[음성인식 재시작]');
+  rec.start();
+}

@@ -1,0 +1,14 @@
+// createElement() 메소드의 사용 예
+
+function setup() {
+  createCanvas(300, 200);
+  background(200);
+  let h3 = createElement('h3', '텍스트를 입력해 봅시다');
+  h3.position(10, 10);			// 제목 위치 설정
+  
+  let textArea = createElement('textarea', 'Type text!');
+  textArea.position(10, 70);		// 텍스트 입력창의 위치 설정
+  textArea.style('font-size', '20px');	// 텍스트 입력창의 폰트 크기 설정
+  textArea.attribute('rows', '4');	// 텍스트 입력창의 행 수: 4행
+  textArea.attribute('cols', '25');	// 텍스트 입력창의 열 수: 25열
+}

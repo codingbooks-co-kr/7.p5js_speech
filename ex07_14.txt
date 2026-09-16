@@ -1,0 +1,42 @@
+// 음성인식을 사용하여 방향(왼쪽, 오른쪽)을 말하면 이모지로 출력
+
+let rec = new p5.SpeechRec('ko-KR', recResult);
+let direction = ['👈🏿', '👉🏿'];
+let index = -1;
+
+function setup() {
+  createCanvas(400, 200);
+  textAlign(CENTER, CENTER);
+  createP('인식단어: 왼쪽, 오른쪽');
+
+  rec.onEnd = recEnd;
+  rec.start(true, false);
+}
+
+function draw() {
+  background(200);
+  if (index >=0 && index < direction.length) {
+    textSize(100);
+    text(direction[index], width/2, height/2);
+  } else {
+    textSize(40);
+    text('좌우방향을 말하세요', width/2, height/2);
+  }
+}
+
+function recResult() {
+  let result = rec.resultString;
+  console.log(result);
+  if (result.indexOf('왼쪽') !== -1) {
+    index = 0;
+  } else if (result.indexOf('오른쪽') !== -1) {
+    index = 1;
+  } else {
+    index = -1;
+  }
+}
+
+function recEnd() {
+  console.log('[음성인식 재시작]');
+  rec.start();
+}

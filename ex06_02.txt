@@ -1,0 +1,10 @@
+// 음성인식 결과 출력2
+
+// 음성인식 객체 생성 및 초기화 ❶한국어 설정, ❷음성인식 결과 반환 시 recResult() 호출
+let rec = new p5.SpeechRec('ko-KR', recResult);
+rec.start();
+
+function recResult() {
+  console.log(rec);
+  console.log(rec.resultString);
+}

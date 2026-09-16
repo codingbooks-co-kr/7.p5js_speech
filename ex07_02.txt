@@ -1,0 +1,31 @@
+// 음성인식으로 인식된 결과를 연속으로 텍스트 입력창에 자동 입력
+
+let rec = new p5.SpeechRec('ko-KR', recResult);
+let textArea, words = '';
+
+function setup() {
+  noCanvas();
+  createElement('h2', '음성인식으로 문장 입력');
+  textArea = createElement('textarea');
+  textArea.style('font-size', '20px');
+  textArea.attribute('rows', '10');
+  textArea.attribute('cols', '40');
+
+  rec.onEnd = recEnd;
+  rec.start(true, false);
+}
+
+function draw() {
+  textArea.value(words);
+}
+
+function recResult() {
+  let result = rec.resultString;
+  words += result;
+  words += '. ';
+}
+
+function recEnd() {
+  console.log('[음성인식 재시작]');
+  rec.start();
+}

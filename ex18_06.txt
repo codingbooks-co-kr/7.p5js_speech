@@ -1,0 +1,130 @@
+// p5.js: 음성인식 키워드로 택시 이동, 택시를 따라가는 자전거, “정지”를 인식하면 두 이동체 사이의 거리를 합성음성으로 출력, 버튼을 누르면 자전거만 제자리에서 랜덤하게 떨림, 게임 종료 시 합성음성 출력, 음성인식 키워드(→“시작”)로 게임 재시작
+
+let speech = new p5.Speech();
+let rec = new p5.SpeechRec("ko-KR", recResult);
+let port = new p5.SerialPort();
+let result = "", x1 = 250, y1 = 250, x2 = 500, y2 = 500;
+let c, d, speed, size = 50, direction = 0, state = false, stop = false;
+
+function setup() {
+  createCanvas(500, 500);
+  port.open('COM5');
+  port.on('open', serialOpen);
+  port.on('data', serialEvent);
+  speech.setLang("ko-KR");
+  rec.onEnd = recEnd;
+  rec.start(true, true);
+
+  c = color(255, 255, 255);
+  textAlign(CENTER, CENTER);
+  textFont('Material Symbols Outlined');
+  textSize(size);
+}
+
+function draw() {
+  background(0); 
+  fill(c);
+  let texi = char(unhex('e559'));
+  text(texi, x1, y1);
+  fill(255, 255, 0);
+  let bike = char(unhex('e52f'));
+  text(bike, x2, y2);
+
+  move();
+  gameover();
+
+  if (result.indexOf("정지") !== -1) {
+    speed = 0;
+    direction = 0;
+    c = color(255, 255, 255);
+    stroke(255, 0, 0);
+    line(x1, y1, x2, y2);
+    if (state) {
+      speech.speak(`거리값은 ${int(d)}입니다`);
+    }
+    state = false;
+  } else {
+    state = true;
+    chase();
+  }
+}
+
+function move() {
+  speed = 2;
+  if (result.indexOf("왼쪽") !== -1) {
+    x1 -= speed;
+    direction = 1;
+    c = color(255, 0, 0);
+  } else if (result.indexOf("오른쪽") !== -1) {
+    x1 += speed;
+    direction = 2;
+    c = color(0, 255, 0);
+  } else if (result.indexOf("위쪽") !== -1) {
+    y1 -= speed;
+    direction = 3;
+    c = color(0, 0, 255);
+  } else if (result.indexOf("아래쪽") !== -1) {
+    y1 += speed;
+    direction = 4;
+    c = color(255, 0, 255);
+  }
+  x1 = constrain(x1, 0, width);
+  y1 = constrain(y1, 0, height);
+}
+
+function chase() {
+  let dx = x1 - x2;
+  let dy = y1 - y2;
+  if (stop) {
+    dx = int(random(3)) - 1;
+    dy = int(random(3)) - 1;
+  }
+  if (dx > 0) x2++;
+  if (dx < 0) x2--;
+  if (dy > 0) y2++;
+  if (dy < 0) y2--;
+}
+
+function gameover() {
+  d = dist(x1, y1, x2, y2);
+  if (d < 5) {
+    text("게임 종료", width/2, height/2);
+    speech.speak('게임 종료');
+    noLoop();지
+  }
+}
+
+function serialOpen() {
+  console.log('Start!');
+  port.clear();
+  port.write('A');
+}
+
+function serialEvent() {
+  let value = port.read();
+  if (value === 0) {
+    stop = true;
+  } else {
+    stop = false;
+  }
+  port.write(direction);
+}
+
+function recResult() {
+  result = rec.resultString;
+  console.log(result);
+  if (result.indexOf("시작") !== -1) {
+    direction = 0;
+    c = color(255, 255, 255);
+    x1 = 250;
+    y1 = 250;
+    x2 = 500;
+    y2 = 500;
+    loop();
+  }
+}
+
+function recEnd() {
+  console.log("[음성인식 재시작]");
+  rec.start();
+}

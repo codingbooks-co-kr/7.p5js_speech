@@ -1,0 +1,48 @@
+// p5.js: 음성 제어(→오프, 일, 이, 삼, 사)로 정수(→0,1,2,3,4) 송신
+
+let rec = new p5.SpeechRec('ko-KR', recResult);
+let port = new p5.SerialPort();
+let result = '';
+
+function setup() {
+  createCanvas(500, 200);
+  port.open('COM5');
+  rec.onEnd = recEnd;
+  rec.start(true, true);
+}
+
+function draw() {
+  background(0);
+  fill(255, 255, 0);
+  textSize(20);
+  text('인식단어: 일(1), 이(2), 삼(3), 사(4), 오프(소등)', 20, 40);
+  
+  if (result.indexOf('일') !== -1 || result.indexOf('1') !== -1) { 
+    text('일(1)', 230, 100);
+    port.write(1);
+  } else if (result.indexOf('이') !== -1 || result.indexOf('2') !== -1) {
+    text('이(2)', 230, 100);
+    port.write(2);
+  } else if (result.indexOf('삼') !== -1 || result.indexOf('3') !== -1) {
+    text('삼(3)', 230, 100);
+    port.write(3);
+  } else if (result.indexOf('사') !== -1 || result.indexOf('4') !== -1) {
+    text('사(4)', 230, 100);
+    port.write(4);
+  } else if (result.indexOf('오프') !== -1 || result.indexOf('소등') !== -1) { 
+    text('오프(소등)', 230, 100);
+    port.write(0);
+  } else {
+    text('인식단어를 말해 주세요', 150, 120);
+  }
+}
+
+function recResult() {
+  result = rec.resultString;
+  console.log(result);
+}
+
+function recEnd() {
+  console.log('[음성인식 재시작]');
+  rec.start();
+}

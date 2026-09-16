@@ -1,0 +1,49 @@
+// 방향키로 택시 이동, 택시를 따라가는 작은 원
+
+let x1 = 250, y1 = 250, x2 = 500, y2 = 500;
+
+function setup() {
+  createCanvas(500, 500);
+  textAlign(CENTER, CENTER);
+  textFont('Material Symbols Outlined');
+  textSize(50);
+}
+
+function draw() {
+  background(0);
+  fill(255, 255, 255);
+  let texi = char(unhex('e559'));
+  text(texi, x1, y1);
+  fill(255, 255, 0);
+  let bike = char(unhex('e52f'));
+  text(bike, x2, y2);
+
+  if (keyIsPressed) {
+    if (keyCode === LEFT_ARROW) {
+      x1 -= 2;
+    }
+    if (keyCode === RIGHT_ARROW) {
+      x1 += 2;
+    }
+    if (keyCode === UP_ARROW) {
+      y1 -= 2;
+    }
+    if (keyCode === DOWN_ARROW) {
+      y1 += 2;
+    }
+  }
+  x1 = constrain(x1, 0, width);
+  y1 = constrain(y1, 0, height);
+
+  let dx = x1 - x2;
+  let dy = y1 - y2;
+  if (dx > 0) x2++;
+  if (dx < 0) x2--;
+  if (dy > 0) y2++;
+  if (dy < 0) y2--;
+
+  let d = dist(x1, y1, x2, y2);
+  if (d < 5) {
+    text("게임 종료", width/2, height/2);
+  }
+}

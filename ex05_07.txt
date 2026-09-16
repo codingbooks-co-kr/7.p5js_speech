@@ -1,0 +1,32 @@
+// 마우스를 누를 때마다 음성합성으로 한국어 문장 출력2
+
+let speech = new p5.Speech();
+let words1 = '마우스를 누르세요', words2 = '안녕하세요';
+
+function setup() {
+  createCanvas(400, 200);
+  speech.setLang('ko-KR');
+  speech.setVoice('Google 한국의');
+  speech.started(speechStart);
+  speech.ended(speechEnd);
+
+  background(0);
+  fill(255, 255, 0);
+  textAlign(CENTER, CENTER);
+  textSize(30);
+  text(words1, width/2, height/2);
+}
+
+function speechStart() {
+  background(random(255), random(255), random(255));
+  text(words2, width/2, height/2);
+}
+
+function speechEnd() {
+  background(0);
+  text(words1, width/2, height/2);
+}
+
+function mousePressed() {
+  speech.speak(words2);
+}
